@@ -1,0 +1,34 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+}
+
+model University {
+  id            Int      @id @default(autoincrement())
+  name          String
+  alphaTwoCode  String   @map("alpha_two_code")
+  country       String
+  stateProvince String?  @map("state-province")
+  domains       String[]
+  webPages      String[] @map("web_pages")
+
+  @@index([name])
+  @@index([country])
+}
