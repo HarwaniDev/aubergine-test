@@ -12,11 +12,13 @@ const CountryContext = createContext<CountryContextValue | undefined>(
 );
 
 export function CountryProvider({
+  initialCountry,
   children,
 }: {
+  initialCountry?: string;
   children: React.ReactNode;
 }) {
-  const [country, setCountry] = useState("");
+  const [country, setCountry] = useState(initialCountry ?? "");
   const value = useMemo(
     () => ({
       country,
@@ -37,5 +39,32 @@ export function useCountry() {
   }
 
   return context;
+}
+ 
+export function CountryForm() {
+  const { country, setCountry } = useCountry();
+
+  return (
+    <form
+      method="get"
+      action="/"
+      className="flex w-full max-w-lg flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center"
+    >
+      <input
+        name="country"
+        aria-label="Country"
+        placeholder="Enter country name"
+        className="w-full rounded-md border px-3 py-2 text-sm shadow-sm sm:max-w-xs"
+        value={country}
+        onChange={(event) => setCountry(event.target.value)}
+      />
+      <button
+        type="submit"
+        className="w-full rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground sm:w-auto"
+      >
+        Filter
+      </button>
+    </form>
+  );
 }
 
